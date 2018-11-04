@@ -10,25 +10,13 @@ Participant = namedtuple('Participant', ['name', 'email'])
 
 def create_secret_santa(participant_list):
 
-    secret_santa_dict = {}
-    secret_santa_list = copy.deepcopy(participant_list)
+    secret_santa = {}
+    random.shuffle(participant_list)
 
-    participant = participant_list[0]
+    for i, participant in enumerate(participant_list):
+        secret_santa[participant.name] = participant_list[(i+1)%len(participant_list)]
 
-    while len(secret_santa_list) > 1:
-        while True:
-            candidate = random.choice(secret_santa_list)
-            if candidate.name != participant.name and secret_santa_dict.get(
-                    candidate.name, None) != participant:
-                secret_santa_dict[participant.name] = candidate
-                secret_santa_list.remove(candidate)
-                participant = candidate
-                break
-
-    secret_santa_dict[participant.name] = participant_list[0]
-
-    return secret_santa_dict
-
+    return secret_santa
 
 def create_secret_santa_email(secret_santa, gift_reciever_name):
 
@@ -44,7 +32,7 @@ def create_secret_santa_email(secret_santa, gift_reciever_name):
 
     msg = MIMEText(message)
 
-    msg['Subject'] = 'Navidad 2018: Amigo Secreto'
+    msg['Subject'] = 'Navidad 2018: Amigo Secreto (VERSION FINAL)'
     msg['To'] = secret_santa.email
     msg = msg.as_string()
 
@@ -74,6 +62,7 @@ if __name__ == '__main__':
         participants.append(Participant(participant_name, participant_email))
 
     secret_santa = create_secret_santa(participants)
+    print(secret_santa)
 
     for gift_reciever, secret_santa in secret_santa.items():
 
