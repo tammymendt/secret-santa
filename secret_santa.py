@@ -7,19 +7,6 @@ import smtplib
 
 Participant = namedtuple('Participant', ['name', 'email'])
 
-PARTICIPANTS = [
-#    Participant("Anabel", "anabel.mendt@gmail.com"),
-#    Participant("Rodrigo", "rodrigocidad@gmail.com"),
-#    Participant("Daniel", "dmendt@gmail.com "),
-#    Participant("Cristal", "cristalboza@gmail.com"),
-    Participant("Tamara", "tammymendt@gmail.com"),
-    Participant("Lorenzo", "lorenzofundaro@gmail.com"),
-    Participant("Lorenzo Test", "lorenzofundaro+test@gmail.com"),
-#    Participant("Lis Maria", "administracion@santaclaramg.com"),
-#    Participant("Roberto", "rfundaro@gmail.com"),
-#    Participant("Ursula", "uehrma@gmail.com")
-]
-
 
 def create_secret_santa(participant_list):
 
@@ -46,13 +33,14 @@ def create_secret_santa(participant_list):
 def create_secret_santa_email(secret_santa, gift_reciever_name):
 
     message = '''
-    Bienvenido al amigo secreto de la Navidad 2018 {secret_santa}!\n
+    Hola {secret_santa}! Bienvenido al amigo secreto de la Navidad 2018 :)\n
 
     Haremos un pequeño intercambio de regalo el 24.12.2018. El regalo puede ser algo
     hecho a mano o comprado con un valor entre 20 y 30 euros.\n
 
     Tu amigo secreto es: {gift_reciever_name}
-    '''.format(secret_santa=secret_santa.name, gift_reciever_name=gift_reciever_name)
+    '''.format(secret_santa=secret_santa.name.capitalize(),
+               gift_reciever_name=gift_reciever_name.capitalize())
 
     msg = MIMEText(message)
 
@@ -81,7 +69,11 @@ if __name__ == '__main__':
     gmail_username = config['Gmail']['user']
     gmail_password = config['Gmail']['app_password']
 
-    secret_santa = create_secret_santa(PARTICIPANTS)
+    participants = []
+    for participant_name, participant_email in config['Participants'].items():
+        participants.append(Participant(participant_name, participant_email))
+
+    secret_santa = create_secret_santa(participants)
 
     for gift_reciever, secret_santa in secret_santa.items():
 
