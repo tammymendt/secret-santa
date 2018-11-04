@@ -1,0 +1,8 @@
+[Gmail]
+user = <your email address>
+app_password = <your application token>
+
+[Participants]
+<Participant name>=<Participant email>
+...
+<Participant name>=<Participant email>
